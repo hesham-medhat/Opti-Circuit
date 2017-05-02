@@ -2,13 +2,13 @@ package Code;
 
 public class Test {
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		// TODO Auto-generated method stub
-		int[]minterms=new int[16];
+		final int[] minterms = new int[16];
 		for (int i = 0; i < minterms.length; i++) {
-			minterms[i]=i;
+			minterms[i] = i;
 		}
-		PrimeImplicants p = new PrimeImplicants();
+		final PrimeImplicants p = new PrimeImplicants();
 		p.listing(minterms);
 
 	}

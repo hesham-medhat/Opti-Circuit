@@ -1,29 +1,33 @@
 package Code;
 
-
-
 public class Node {
-	Object data ;
+	Object data;
 	Node next;
-	public Node (Object data , Node next){
-		this.data=data;
-		this.next=next;
+
+	public Node(final Object data, final Node next) {
+		this.data = data;
+		this.next = next;
 	}
-	public Object getElement(){
-		return data ;
+
+	public Object getElement() {
+		return data;
 	}
-	public Node getNext(){
+
+	public Node getNext() {
 		return next;
 	}
-	public void setElement(Object data){
-		this.data=data;
-	}
-	public void setNext(Node next){
-		this.next=next;
-	}
-	public String toString(){
-		return data+""; 
+
+	public void setElement(final Object data) {
+		this.data = data;
 	}
 
+	public void setNext(final Node next) {
+		this.next = next;
+	}
+
+	@Override
+	public String toString() {
+		return data + "";
+	}
 
 }
