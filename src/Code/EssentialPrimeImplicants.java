@@ -23,7 +23,6 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 
 	@Override
 	public DoublyLinkedList[] coveredMinterms(DoublyLinkedList[] primes) {
-		// TODO Auto-generated method stub
 		DoublyLinkedList[] coveredMTs = new DoublyLinkedList[primes.length];
 		int index = 0;
 		for (DoublyLinkedList prime : primes) {
@@ -62,9 +61,24 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 	}
 
 	@Override
-	public String getFormula(DoublyLinkedList[] coveringImplicants) {
-		// TODO Auto-generated method stub
-		return null;
+	public String getFormula(final DoublyLinkedList[] coveringImplicants) {
+		StringBuilder formula = new StringBuilder();
+		boolean firstIteration;
+		for (int i = 0 ; i < coveringImplicants.length ; i++) {
+			DLNode iterator = coveringImplicants[i].getHead();
+			formula.append('(');
+			firstIteration = true;
+			while (iterator != null) {
+				if (!firstIteration) {
+					formula.append('+');
+					firstIteration = false;
+				}
+				formula.append('P');
+				formula.append(iterator.getElement());
+			}
+			formula.append(')');
+		}
+		return formula.toString();
 	}
 
 
