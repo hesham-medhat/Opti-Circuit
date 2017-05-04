@@ -75,11 +75,11 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 				}
 				formula.append('P');
 				formula.append(iterator.getElement());
+				iterator = iterator.getNext();
 			}
 			formula.append(')');
 		}
 		return formula.toString();
 	}
-
 
 }
