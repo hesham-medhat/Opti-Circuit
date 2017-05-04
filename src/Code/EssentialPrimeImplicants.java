@@ -11,9 +11,28 @@ import organizingCode.IEssentialPrimeImplicants;
 public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 
 	@Override
+	public void getCombinations(final DLNode node, int sum, final DoublyLinkedList coveredMTs) {
+		if (node.getNext() != null) {
+			getCombinations(node.getNext(), sum, coveredMTs); // Skipped element
+		}
+		sum += (int) node.getElement();
+		DLNode mintermNode = new DLNode(sum, null, null);
+		coveredMTs.add(mintermNode);
+		getCombinations(node.getNext(), sum, coveredMTs); // Counted element
+	}
+
+	@Override
 	public DoublyLinkedList[] coveredMinterms(DoublyLinkedList[] primes) {
 		// TODO Auto-generated method stub
-		return null;
+		DoublyLinkedList[] coveredMTs = new DoublyLinkedList[primes.length];
+		int index = 0;
+		for (DoublyLinkedList prime : primes) {
+			DLNode headPrime = prime.getHead();
+			coveredMTs[index].add(headPrime.getElement());
+			getCombinations(headPrime, 0, coveredMTs[index]);
+			index++;
+		}
+		return coveredMTs;
 	}
 
 	@Override
@@ -47,5 +66,6 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 }

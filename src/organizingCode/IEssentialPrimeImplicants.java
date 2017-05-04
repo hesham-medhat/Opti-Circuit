@@ -1,5 +1,6 @@
 package organizingCode;
 
+import Code.DLNode;
 import Code.DoublyLinkedList;
 
 /**
@@ -9,6 +10,15 @@ import Code.DoublyLinkedList;
  *
  */
 public interface IEssentialPrimeImplicants {
+
+	/**
+	 * Gets possible minterm combinations from a PI.
+	 * This method works recursively adding combinations to a given list.
+	 * @param node of the list representation of PI.
+	 * @param sum of the combinations picked so far.
+	 * @param coveredMTs list where the possible combinations will be added.
+	 */
+	public void getCombinations (final DLNode node, int sum, final DoublyLinkedList coveredMTs);
 
 	/**
 	 * This method gets the array of MTs covered by given PIs.
