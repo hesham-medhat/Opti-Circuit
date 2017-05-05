@@ -4,7 +4,7 @@ import organizingCode.IEssentialPrimeImplicants;
 
 /**
  * This class works on getting essential PIs from given PIs.
- * 
+ *
  * @author H
  *
  */
@@ -16,32 +16,32 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 			getCombinations(node.getNext(), sum, coveredMTs); // Skipped element
 		}
 		sum += (int) node.getElement();
-		DLNode mintermNode = new DLNode(sum, null, null);
+		final DLNode mintermNode = new DLNode(sum, null, null);
 		coveredMTs.add(mintermNode);
 		getCombinations(node.getNext(), sum, coveredMTs); // Counted element
 	}
 
 	@Override
-	public DoublyLinkedList[] coveredMinterms(DoublyLinkedList[] primes) {
-		DoublyLinkedList[] coveredMTs = new DoublyLinkedList[primes.length];
+	public DoublyLinkedList[] coveredMinterms(final DoublyLinkedList[] primes) {
+		final DoublyLinkedList[] coveredMTs = new DoublyLinkedList[primes.length];
 		int index = 0;
-		for (DoublyLinkedList prime : primes) {
-			DLNode headPrime = prime.getHead();
+		for (final DoublyLinkedList prime : primes) {
+			final DLNode headPrime = prime.getHead();
 			coveredMTs[index].add(headPrime.getElement());
-			getCombinations(headPrime, 0, coveredMTs[index]);
+			getCombinations(headPrime.getNext(), (int) headPrime.getElement(), coveredMTs[index]);
 			index++;
 		}
 		return coveredMTs;
 	}
 
 	@Override
-	public DoublyLinkedList[] coveringPIs(DoublyLinkedList[] coveredMT, int[] minterms) {
+	public DoublyLinkedList[] coveringPIs(final DoublyLinkedList[] coveredMT, final int[] minterms) {
 
-		DoublyLinkedList[] coveringPIs = new DoublyLinkedList[minterms.length];
+		final DoublyLinkedList[] coveringPIs = new DoublyLinkedList[minterms.length];
 
-		for (int m : minterms) {
+		for (final int m : minterms) {
 
-			DoublyLinkedList coveringPI4m = new DoublyLinkedList();
+			final DoublyLinkedList coveringPI4m = new DoublyLinkedList();
 
 			for (int i = 0; i < coveredMT.length; i++) {
 				DLNode iteratorNode;
@@ -62,10 +62,10 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 
 	@Override
 	public String getFormula(final DoublyLinkedList[] coveringImplicants) {
-		StringBuilder formula = new StringBuilder();
+		final StringBuilder formula = new StringBuilder();
 		boolean firstIteration;
-		for (int i = 0 ; i < coveringImplicants.length ; i++) {
-			DLNode iterator = coveringImplicants[i].getHead();
+		for (final DoublyLinkedList coveringImplicant : coveringImplicants) {
+			DLNode iterator = coveringImplicant.getHead();
 			formula.append('(');
 			firstIteration = true;
 			while (iterator != null) {
