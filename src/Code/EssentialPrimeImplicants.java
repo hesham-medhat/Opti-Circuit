@@ -12,13 +12,14 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 
 	@Override
 	public void getCombinations(final DLNode node, int sum, final DoublyLinkedList coveredMTs) {
-		if (node.getNext() != null) {
-			getCombinations(node.getNext(), sum, coveredMTs); // Skipped element
+		if (node != null) {
+			if (node.getNext() != null) {
+				getCombinations(node.getNext(), sum, coveredMTs); // Skipped element
+			}
+			sum += (int) node.getElement();
+			coveredMTs.add(sum);
+			getCombinations(node.getNext(), sum, coveredMTs); // Counted element
 		}
-		sum += (int) node.getElement();
-		final DLNode mintermNode = new DLNode(sum, null, null);
-		coveredMTs.add(mintermNode);
-		getCombinations(node.getNext(), sum, coveredMTs); // Counted element
 	}
 
 	@Override
@@ -27,8 +28,11 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 		int index = 0;
 		for (final DoublyLinkedList prime : primes) {
 			final DLNode headPrime = prime.getHead();
+			coveredMTs[index] = new DoublyLinkedList();
 			coveredMTs[index].add(headPrime.getElement());
-			getCombinations(headPrime.getNext(), (int) headPrime.getElement(), coveredMTs[index]);
+			if (headPrime.getNext() != null ) {
+				getCombinations(headPrime.getNext(), (int) headPrime.getElement(), coveredMTs[index]);
+			}
 			index++;
 		}
 		return coveredMTs;
@@ -38,7 +42,7 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 	public DoublyLinkedList[] coveringPIs(final DoublyLinkedList[] coveredMT, final int[] minterms) {
 
 		final DoublyLinkedList[] coveringPIs = new DoublyLinkedList[minterms.length];
-
+		int index = 0; //index of the minterm. We will see which implicants cover it.
 		for (final int m : minterms) {
 
 			final DoublyLinkedList coveringPI4m = new DoublyLinkedList();
@@ -54,8 +58,8 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 				}
 			}
 
-			coveringPIs[m] = coveringPI4m;
-
+			coveringPIs[index] = coveringPI4m;
+			index++;
 		}
 		return coveringPIs;
 	}
@@ -71,8 +75,8 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 			while (iterator != null) {
 				if (!firstIteration) {
 					formula.append('+');
-					firstIteration = false;
 				}
+				firstIteration = false;
 				formula.append('P');
 				formula.append(iterator.getElement());
 				iterator = iterator.getNext();
