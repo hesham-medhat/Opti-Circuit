@@ -1,5 +1,6 @@
 package organizingCode;
 
+import Code.DoublyLinkedList;
 import Code.SinglyLinkedList;
 
 public interface IPrimeImplicants {
@@ -9,11 +10,18 @@ public interface IPrimeImplicants {
 	 * @parameters int array of minterms return array of linked lists
 	 */
 	SinglyLinkedList[] listing(int[] minterms);
+	
+	/**
+	 * Sorts the combinations of the implicant.
+	 * @param implicant input
+	 * @return sorted implicant
+	 */
+	DoublyLinkedList sortImplicantCombinations(DoublyLinkedList implicant);
 
 	/**
-	 * compine one haming distance minterms
+	 * combine one haming distance minterms
 	 * 
 	 * @parameters 2 lists return a list
 	 */
-	SinglyLinkedList[] compining(SinglyLinkedList group1, SinglyLinkedList group2);
+	SinglyLinkedList combiningTwoGroups(SinglyLinkedList group1, SinglyLinkedList group2S);
 }

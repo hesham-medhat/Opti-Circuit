@@ -23,6 +23,24 @@ public class DoublyLinkedList implements ILinkedList {
 	 * Size of the list.
 	 */
 	private int size;
+	private boolean taken ;
+	/*special for this app implementation
+	 * 
+	 */
+
+	/**
+	 * @return the taken
+	 */
+	public boolean isTaken() {
+		return taken;
+	}
+
+	/**
+	 * @param taken the taken to set
+	 */
+	public void setTaken(boolean taken) {
+		this.taken = taken;
+	}
 
 	/**Constructor.
 	 *
@@ -32,6 +50,7 @@ public class DoublyLinkedList implements ILinkedList {
 		head = null;
 		tail = null;
 		size = 0;
+		taken=false;
 	}
 
 	@Override
