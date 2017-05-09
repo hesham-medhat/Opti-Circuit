@@ -6,13 +6,15 @@ import Code.SinglyLinkedList;
 public interface IPrimeImplicants {
 	/**
 	 * listing minterms in groups
-	 * 
-	 * @parameters int array of minterms return array of linked lists
+	 * @author Marina
+	 * @parameters int array of minterms
+	 * @return  array of linked lists
 	 */
 	SinglyLinkedList[] listing(int[] minterms);
 	
 	/**
 	 * Sorts the combinations of the implicant.
+	 * @author Marina
 	 * @param implicant input
 	 * @return sorted implicant
 	 */
@@ -23,5 +25,24 @@ public interface IPrimeImplicants {
 	 * 
 	 * @parameters 2 lists return a list
 	 */
-	SinglyLinkedList combiningTwoGroups(SinglyLinkedList group1, SinglyLinkedList group2S);
+	SinglyLinkedList combiningTwoGroups(SinglyLinkedList group1, SinglyLinkedList group2);
+	
+	/**
+	 * remove the empty groups
+	 * performs the method combining one level till it generates 1 group only containing the essential prime implicants
+	 *@author Marina
+	 * @parameter array of singly linked lists generated from the method listing
+	 * @return one singly linked list ready to get combinations 
+	 */
+	SinglyLinkedList combineMultilevels (SinglyLinkedList[]list);
+	
+	/**
+	 * performs the method combine 2 groups depending on the length of the array of lists
+	 * call itself recursively till the length of the list is dropped down to 1 list 
+	 * @author Marina
+	 * @parameter array of singly linked lists
+	 * @return array of singly linked lists 
+	 * 
+	 */
+	SinglyLinkedList []combineOneLevel (SinglyLinkedList[]list);
 }

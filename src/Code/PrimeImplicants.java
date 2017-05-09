@@ -113,4 +113,37 @@ public class PrimeImplicants implements IPrimeImplicants {
 		return implicant;
 	}
 
+	
+	
+
+	@Override
+	public SinglyLinkedList[] combineOneLevel(SinglyLinkedList[] list) {
+		// TODO Auto-generated method stub
+		if(list.length==1)return list;
+		for (int i = 0; i < list.length-1; i++) {
+			list[i]=this.combiningTwoGroups(list[i], list[i+1]);
+		}
+		SinglyLinkedList []newList=new SinglyLinkedList[list.length-1];
+		for (int i = 0; i < newList.length; i++) {
+			newList[i]=list[i];
+		}
+		return this.combineOneLevel(newList);
+	}
+
+	@Override
+	public SinglyLinkedList combineMultilevels(SinglyLinkedList[] list) {
+		// TODO Auto-generated method stub
+		SinglyLinkedList[] modifiedList=new SinglyLinkedList[list.length];
+		int index=0;
+		for (int i = 0; i < list.length; i++) {
+			if(list[i]!=null){
+			modifiedList[index]=new SinglyLinkedList();
+			modifiedList[index++]=list[i];	
+			}
+		}
+		SinglyLinkedList []result=new SinglyLinkedList[1];
+		result=this.combineOneLevel(modifiedList);
+		return result[0];
+	}
+
 }
