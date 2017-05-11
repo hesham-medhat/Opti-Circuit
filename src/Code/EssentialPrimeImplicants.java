@@ -11,14 +11,14 @@ import organizingCode.IEssentialPrimeImplicants;
 public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 
 	@Override
-	public void getCombinations(final DLNode node, int sum, final DoublyLinkedList coveredMTs) {
+	public void findCombinations(final DLNode node, int sum, final DoublyLinkedList coveredMTs) {
 		if (node != null) {
 			if (node.getNext() != null) {
-				getCombinations(node.getNext(), sum, coveredMTs); // Skipped element
+				findCombinations(node.getNext(), sum, coveredMTs); // Skipped element
 			}
 			sum += (int) node.getElement();
 			coveredMTs.add(sum);
-			getCombinations(node.getNext(), sum, coveredMTs); // Counted element
+			findCombinations(node.getNext(), sum, coveredMTs); // Counted element
 		}
 	}
 
@@ -31,7 +31,7 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 			coveredMTs[index] = new DoublyLinkedList();
 			coveredMTs[index].add(headPrime.getElement());
 			if (headPrime.getNext() != null ) {
-				getCombinations(headPrime.getNext(), (int) headPrime.getElement(), coveredMTs[index]);
+				findCombinations(headPrime.getNext(), (int) headPrime.getElement(), coveredMTs[index]);
 			}
 			index++;
 		}
@@ -85,5 +85,63 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 		}
 		return formula.toString();
 	}
+	
+	@Override
+	public String getEssentials(final DoublyLinkedList[] coveringImplicants) {
+		DoublyLinkedList essentials = new DoublyLinkedList();
+		for (DoublyLinkedList coveringPI4m : coveringImplicants) {
+			if (coveringPI4m.getSize() == 1) {
+				essentials.add(coveringPI4m.get(0)); //Adding index in primes
+			}
+		}
+		
+		if (essentials.getSize() != 0) {
+			final StringBuilder formula = new StringBuilder();
+			DLNode iterator;
+			iterator = essentials.getHead();
+			while (iterator != null) {
+				formula.append('P');
+				formula.append((int) iterator.getElement());
+				iterator = iterator.getNext();
+			}
+			return formula.toString();
+		}
+		return null;
+	}
+	
+	@Override
+	public SinglyLinkedList findSolutions(SinglyLinkedList solutions, final int toCover, DoublyLinkedList[] coveringPIs, SinglyLinkedList thisSolution) {
+		if (toCover != coveringPIs.length) { //We still need to cover MTs
+			if (coveringPIs[toCover].getSize() != 1) { //There is more than one PI that could cover the MT
+				DLNode iteratorNode;
+				iteratorNode = coveringPIs[toCover].getHead();
+				while (iteratorNode != null) {
+					thisSolution.add(iteratorNode.getElement());
+					solutions = findSolutions(solutions, toCover + 1, coveringPIs, thisSolution);
+					iteratorNode = iteratorNode.getNext();
+					thisSolution.remove(thisSolution.size() - 1);
+				}
+			} else {
+				thisSolution.add(coveringPIs[toCover].getHead().getElement());
+				solutions = findSolutions(solutions, toCover + 1, coveringPIs, thisSolution);
+			}
+		} else {
+			solutions.add(thisSolution);
+		}
+		return solutions;
+	}
+
+	@Override
+	public SinglyLinkedList getSolutions(DoublyLinkedList[] primes, int[] minterms) {
+		DoublyLinkedList[] coveredMTs = coveredMinterms(primes);
+		DoublyLinkedList[] coveringPIs = coveringPIs(coveredMTs, minterms);
+		
+		SinglyLinkedList solutions = new SinglyLinkedList();
+		SinglyLinkedList thisSolution = new SinglyLinkedList();
+		solutions = findSolutions(solutions, 0, coveringPIs, thisSolution);
+		return solutions;
+	}
+
+	
 
 }

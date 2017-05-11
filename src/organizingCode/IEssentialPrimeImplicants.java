@@ -2,6 +2,7 @@ package organizingCode;
 
 import Code.DLNode;
 import Code.DoublyLinkedList;
+import Code.SinglyLinkedList;
 
 /**
  * This is the interface of the class that finds the essential
@@ -18,7 +19,7 @@ public interface IEssentialPrimeImplicants {
 	 * @param sum of the combinations picked so far.
 	 * @param coveredMTs list where the possible combinations will be added.
 	 */
-	public void getCombinations (final DLNode node, int sum, final DoublyLinkedList coveredMTs);
+	public void findCombinations (final DLNode node, int sum, final DoublyLinkedList coveredMTs);
 
 	/**
 	 * This method gets the array of MTs covered by given PIs.
@@ -48,5 +49,38 @@ public interface IEssentialPrimeImplicants {
 	 * At this point, we need boolean algebra solving techniques to
 	 * get the final optimal answers.
 	 */
-	public String getFormula(DoublyLinkedList[] coveringImplicants);
+	public String getFormula(final DoublyLinkedList[] coveringImplicants);
+	
+	/**
+	 * This method finds the essential PIs using dominance.
+	 * @param coveringImplicants array obtained from coveringImplicants.
+	 * @return The essential prime implicants in the form of a
+	 * string as Px Py Pz where (x,y,z..) represent the indices
+	 * of these implicants in the "primes" input list.
+	 */
+	public String getEssentials(final DoublyLinkedList[] coveringImplicants);
+	
+	/**
+	 * This function uses recursion to find all possible solutions
+	 * of how to use the covering PIs to cover the MTs we need covered.
+	 * @param solutions the returner list of solutions
+	 * @param toCover index of coveringPIs MT that we need covered
+	 * @param coveringPIs obtained from coveringPIs method
+	 * @param thisSolution the current solution that the method
+	 * is trying to get in the recursive calls
+	 * @return the list of SLLs of solutions.
+	 */
+	public SinglyLinkedList findSolutions(SinglyLinkedList solutions, int toCover, DoublyLinkedList[] coveringPIs, SinglyLinkedList thisSolution);
+	
+	/**
+	 * This method uses all methods in this class to obtain all the
+	 * possible solutions for the given primes to cover given minterms.
+	 * @param primes array of prime implicants (DLLs).
+	 * @param minterms list of minterms to cover.
+	 * @return a String list of solutions.
+	 * Each element of this list is a string solution in the form
+	 * of PxPyPz where (x,y,z,..) are the indices of the PIs in the
+	 * given primes array.
+	 */
+	public SinglyLinkedList getSolutions(final DoublyLinkedList[] primes, final int[] minterms);
 }
