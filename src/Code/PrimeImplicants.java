@@ -11,7 +11,6 @@ public class PrimeImplicants implements IPrimeImplicants {
 	
 	@Override
 	public SinglyLinkedList[] listing(final int[] minterms) {
-		// TODO Auto-generated method stub
 		// get max of minterms
 		int max = minterms[0];
 		for (int i = 1; i < minterms.length; i++) {
@@ -21,12 +20,13 @@ public class PrimeImplicants implements IPrimeImplicants {
 		}
 		// determine number of groups based on max minterm
 		final int digits = (int) (Math.log(max) / Math.log(2) + 1);
-		// create array of arrays each row represent a group
+		// create array of SLL each list represent a group
 		final SinglyLinkedList[] groups = new SinglyLinkedList[digits + 1];
 		for (int i = 0; i < groups.length; i++) {
 			groups[i] = new SinglyLinkedList();
 		}
-		// distribute minterms on rows of the array
+		// distribute minterms on rows of the array based on number
+		//of ones in the binary representation of the minterm
 		for (final int minterm : minterms) {
 			if (minterm == 0) {
 				groups[0].add(new DoublyLinkedList());
@@ -48,19 +48,24 @@ public class PrimeImplicants implements IPrimeImplicants {
 
 			}
 		}
-
+		//end of distribution 
 		return groups;
 	}
 
 	@Override
 	public SinglyLinkedList combiningTwoGroups(SinglyLinkedList group1, final SinglyLinkedList group2) {
+		//create a new SLL to put the new group in it
 		SinglyLinkedList result = new SinglyLinkedList();
+		//iterate over the first group sent to the method
 		for (int i = 0; i < group1.size; i++) {
+			//iterate over the second group sent to the method
 			for (int j = 0; j < group2.size; j++) {
+				//get the elements from the groups one by one
 				final int x = (int) ((DoublyLinkedList) group1.get(i)).get(0);
 				final int y = (int) ((DoublyLinkedList) group2.get(j)).get(0);
-				// the difference between 2 implicants is a power of 2
+				// check if the difference between 2 implicants is a power of 2
 				if (x < y && Math.log(y - x) / Math.log(2) - (int) (Math.log(y - x) / Math.log(2)) < 1e-10) {
+					//iterate over the 2 DLL of the element to check if the haming distances match or not
 					DLNode iteratorNode1;
 					DLNode iteratorNode2;
 					iteratorNode1 = ((DoublyLinkedList) (group1.get(i))).getNode(1);
@@ -74,15 +79,24 @@ public class PrimeImplicants implements IPrimeImplicants {
 						iteratorNode1 = iteratorNode1.getNext();
 						iteratorNode2 = iteratorNode2.getNext();
 					}
+					//if we get matching mark the elements as taken 
 					if (!mismatch) {
 						((DoublyLinkedList) group1.get(i)).setTaken(true);
 						((DoublyLinkedList) group2.get(j)).setTaken(true);
-						((DoublyLinkedList) group1.get(i)).add(y - x);
-						result.add(this.sortImplicantCombinations((DoublyLinkedList) group1.get(i)));
+						//put the new element in the SLL of result
+						DoublyLinkedList temp = new DoublyLinkedList();
+						for (int c = 0 ; c < ((DoublyLinkedList) group1.get(i)).getSize() ; c++) {
+							temp.add(((DoublyLinkedList) group1.get(i)).get(c));
+						}
+						//add the haming distance between the 2 combined elements to the new element
+						temp.add(y - x);
+						//arrange the haming distances to make it easy to check matching elements
+						result.add(this.sortImplicantCombinations(temp));
 					}
 				}
 			}
 		}
+		//check if there is any non-taken elements in the first group and add it to the primes
 		Node iterator;
 		iterator = group1.head.getNext();
 		while (iterator != null) {
@@ -91,6 +105,7 @@ public class PrimeImplicants implements IPrimeImplicants {
 			}
 			iterator = iterator.getNext();
 		}
+		//return the resulting group as the first group to the next level
 		group1 = result;
 		return group1;
 	}
@@ -118,32 +133,45 @@ public class PrimeImplicants implements IPrimeImplicants {
 
 	@Override
 	public SinglyLinkedList[] combineOneLevel(SinglyLinkedList[] list) {
-		// TODO Auto-generated method stub
+		//if the list contains only one group end recursion
 		if(list.length==1)return list;
+		//iterate over the groups of the list and mark all the elements as not taken
+		for (int i = 0; i < list.length; i++) {
+			for (int j = 0; j < list[i].size; j++) {
+				((DoublyLinkedList)(list[i].get(j))).setTaken(false);
+			}
+		}
+		//iterate over the groups of the list and combine them 2 by 2 and store the result for the next level
 		for (int i = 0; i < list.length-1; i++) {
 			list[i]=this.combiningTwoGroups(list[i], list[i+1]);
+			//remove repetition here
+			
+		        
+
 		}
+		//check the none taken elements in the last group because it hasn't been
+		//checked in the combiningTowGroups method
+		Node iterator;
+		iterator = list[list.length-1].head.getNext();
+		while (iterator != null) {
+			if (!((DoublyLinkedList) (iterator.getElement())).isTaken()) {
+				primes.add(iterator.getElement());
+			}
+			iterator = iterator.getNext();
+		}
+		//prepare a new list for the new level
 		SinglyLinkedList []newList=new SinglyLinkedList[list.length-1];
 		for (int i = 0; i < newList.length; i++) {
 			newList[i]=list[i];
 		}
+		//recursively call the function again for the new list to combine the new level
 		return this.combineOneLevel(newList);
 	}
 
 	@Override
-	public SinglyLinkedList combineMultilevels(SinglyLinkedList[] list) {
-		// TODO Auto-generated method stub
-		SinglyLinkedList[] modifiedList=new SinglyLinkedList[list.length];
-		int index=0;
-		for (int i = 0; i < list.length; i++) {
-			if(list[i]!=null){
-			modifiedList[index]=new SinglyLinkedList();
-			modifiedList[index++]=list[i];	
-			}
-		}
-		SinglyLinkedList []result=new SinglyLinkedList[1];
-		result=this.combineOneLevel(modifiedList);
-		return result[0];
+	public SinglyLinkedList generatePrimeImplicants(int[] minterms) {
+		this.combineOneLevel(this.listing(minterms));
+		return this.primes;
 	}
 
 }

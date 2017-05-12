@@ -28,13 +28,12 @@ public interface IPrimeImplicants {
 	SinglyLinkedList combiningTwoGroups(SinglyLinkedList group1, SinglyLinkedList group2);
 	
 	/**
-	 * remove the empty groups
 	 * performs the method combining one level till it generates 1 group only containing the essential prime implicants
 	 *@author Marina
-	 * @parameter array of singly linked lists generated from the method listing
-	 * @return one singly linked list ready to get combinations 
+	 * @parameter array of integers containing minterms
+	 * @return one singly linked list of prime implicants ready to get combinations method 
 	 */
-	SinglyLinkedList combineMultilevels (SinglyLinkedList[]list);
+	SinglyLinkedList generatePrimeImplicants(int[] minterms);
 	
 	/**
 	 * performs the method combine 2 groups depending on the length of the array of lists
