@@ -142,6 +142,4 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 		return solutions;
 	}
 
-	
-
 }
