@@ -11,14 +11,11 @@ public class Test {
 		d[0].add(2);
 		d[1]=new DoublyLinkedList();
 		d[1].add(5);d[1].add(2);
-		int[] m = {0,2,5,7};
+		int[] m = {4,2,6,8,10,5,12,14,15};
 		PrimeImplicants p = new PrimeImplicants();
-		p.listing(m);
+		p.generatePrimeImplicants(m);
 		DoublyLinkedList[] coveringPIs = e.coveringPIs(e.coveredMinterms(d), m);
-		System.out.println(e.getFormula(coveringPIs));
-		System.out.println("xD");
-		System.out.println("xD");
-		System.out.println("xD");
+		
 	}
 
 }
