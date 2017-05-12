@@ -142,4 +142,44 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 		return solutions;
 	}
 
+	@Override
+	public String[] possibleOptimization(DoublyLinkedList[] primes, SinglyLinkedList solutions) {
+		// TODO Auto-generated method stub
+		String[] possibleOptimization = new String[solutions.size];
+		//iterate over the SLL solutions
+		for (int i = 0; i < solutions.size; i++) {
+			//add a string to the returned array representing a solution
+			possibleOptimization[i]=new String();
+			//iterate over the SLL of the solution
+			for (int j = 0; j < ((SinglyLinkedList)solutions.get(i)).size; j++) {
+				//create a reference to the implicants of the solution
+				DoublyLinkedList currentImplicant =primes[(int)((SinglyLinkedList)solutions.get(i)).get(j)];
+				//convert the implicant to binary
+				String binary = Integer.toString((int)currentImplicant.get(0), 2);
+				int A = 'A';
+				if(j!=0){
+					possibleOptimization[i]=possibleOptimization[i]+'+';
+				}
+				//convert the binary to literals
+				for (int k = 0; k < binary.length(); k++) {
+					boolean found = false;
+					for (int k2 = 1; k2 < currentImplicant.size(); k2++) {
+						if((int)currentImplicant.get(k2)==Math.pow(2, k)){
+							found= true;
+						}
+					}
+					if(!found){
+					if(binary.charAt(k)=='0'){
+					possibleOptimization[i]=possibleOptimization[i]+A;	
+					}else{
+						possibleOptimization[i]=possibleOptimization[i]+(A)+'\'';
+					}
+				}
+				A++;
+				}}
+			}
+		
+		return possibleOptimization;
+	}
+
 }

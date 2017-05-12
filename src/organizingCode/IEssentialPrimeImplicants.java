@@ -83,4 +83,13 @@ public interface IEssentialPrimeImplicants {
 	 * given primes array.
 	 */
 	public SinglyLinkedList getSolutions(final DoublyLinkedList[] primes, final int[] minterms);
+	
+	/**
+	 * this method turn all the possible silotions into functions with letrals 
+	 * @author Marina
+	 * @param primes array of prime implicants (DLLs).
+	 * @parameter SLL of SLL each list is a solution 
+	 * @return array of strings each string is a possible solution
+	 */
+	public String[]possibleOptimization (DoublyLinkedList[] primes, SinglyLinkedList solutions );
 }
