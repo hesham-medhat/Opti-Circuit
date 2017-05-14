@@ -1,5 +1,9 @@
 package Code;
 
+import java.lang.reflect.Array;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
+
 import organizingCode.IEssentialPrimeImplicants;
 
 /**
@@ -10,15 +14,18 @@ import organizingCode.IEssentialPrimeImplicants;
  */
 public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 
+	private static int MAX_TERMS_ASSUMED = 999999999;
 	@Override
 	public void findCombinations(final DLNode node, int sum, final DoublyLinkedList coveredMTs) {
 		if (node != null) {
 			if (node.getNext() != null) {
-				findCombinations(node.getNext(), sum, coveredMTs); // Skipped element
+				findCombinations(node.getNext(), sum, coveredMTs); // Skipped
+																	// element
 			}
 			sum += (int) node.getElement();
 			coveredMTs.add(sum);
-			findCombinations(node.getNext(), sum, coveredMTs); // Counted element
+			findCombinations(node.getNext(), sum, coveredMTs); // Counted
+																// element
 		}
 	}
 
@@ -30,7 +37,7 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 			final DLNode headPrime = prime.getHead();
 			coveredMTs[index] = new DoublyLinkedList();
 			coveredMTs[index].add(headPrime.getElement());
-			if (headPrime.getNext() != null ) {
+			if (headPrime.getNext() != null) {
 				findCombinations(headPrime.getNext(), (int) headPrime.getElement(), coveredMTs[index]);
 			}
 			index++;
@@ -42,7 +49,8 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 	public DoublyLinkedList[] coveringPIs(final DoublyLinkedList[] coveredMT, final int[] minterms) {
 
 		final DoublyLinkedList[] coveringPIs = new DoublyLinkedList[minterms.length];
-		int index = 0; //index of the minterm. We will see which implicants cover it.
+		int index = 0; // index of the minterm. We will see which implicants
+						// cover it.
 		for (final int m : minterms) {
 
 			final DoublyLinkedList coveringPI4m = new DoublyLinkedList();
@@ -85,16 +93,16 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 		}
 		return formula.toString();
 	}
-	
+
 	@Override
 	public String getEssentials(final DoublyLinkedList[] coveringImplicants) {
 		DoublyLinkedList essentials = new DoublyLinkedList();
 		for (DoublyLinkedList coveringPI4m : coveringImplicants) {
 			if (coveringPI4m.getSize() == 1) {
-				essentials.add(coveringPI4m.get(0)); //Adding index in primes
+				essentials.add(coveringPI4m.get(0)); // Adding index in primes
 			}
 		}
-		
+
 		if (essentials.getSize() != 0) {
 			final StringBuilder formula = new StringBuilder();
 			DLNode iterator;
@@ -108,78 +116,147 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 		}
 		return null;
 	}
-	
+/********/
 	@Override
-	public SinglyLinkedList findSolutions(SinglyLinkedList solutions, final int toCover, DoublyLinkedList[] coveringPIs, SinglyLinkedList thisSolution) {
-		if (toCover != coveringPIs.length) { //We still need to cover MTs
-			if (coveringPIs[toCover].getSize() != 1) { //There is more than one PI that could cover the MT
-				DLNode iteratorNode;
-				iteratorNode = coveringPIs[toCover].getHead();
+	public DoublyLinkedList findSolutions(DoublyLinkedList[] coveredMT, DoublyLinkedList[] powerSet, int[] minterms) {
+		DoublyLinkedList solutions = new DoublyLinkedList();
+		for (DoublyLinkedList p : powerSet) {
+			boolean [] covered = new boolean[minterms.length];
+			boolean allCovered = true;
+			for (int i = 0; i < p.getSize(); i++) {
+				DoublyLinkedList checker = coveredMT[(int) p.get(i)];
+				DLNode iteratorNode = checker.getHead();
 				while (iteratorNode != null) {
-					thisSolution.add(iteratorNode.getElement());
-					solutions = findSolutions(solutions, toCover + 1, coveringPIs, thisSolution);
+					int mintermIndex = -1;
+					for (int minterm : minterms) {
+						mintermIndex++;
+						if (minterm == (int) iteratorNode.getElement()) {
+							break;
+						}
+					}
+					covered[mintermIndex] = true;
 					iteratorNode = iteratorNode.getNext();
-					thisSolution.remove(thisSolution.size() - 1);
 				}
-			} else {
-				thisSolution.add(coveringPIs[toCover].getHead().getElement());
-				solutions = findSolutions(solutions, toCover + 1, coveringPIs, thisSolution);
 			}
-		} else {
-			solutions.add(thisSolution);
-		}
-		return solutions;
-	}
-
-	@Override
-	public SinglyLinkedList getSolutions(DoublyLinkedList[] primes, int[] minterms) {
-		DoublyLinkedList[] coveredMTs = coveredMinterms(primes);
-		DoublyLinkedList[] coveringPIs = coveringPIs(coveredMTs, minterms);
-		
-		SinglyLinkedList solutions = new SinglyLinkedList();
-		SinglyLinkedList thisSolution = new SinglyLinkedList();
-		solutions = findSolutions(solutions, 0, coveringPIs, thisSolution);
-		return solutions;
-	}
-
-	@Override
-	public String[] possibleOptimization(DoublyLinkedList[] primes, SinglyLinkedList solutions) {
-		// TODO Auto-generated method stub
-		String[] possibleOptimization = new String[solutions.size];
-		//iterate over the SLL solutions
-		for (int i = 0; i < solutions.size; i++) {
-			//add a string to the returned array representing a solution
-			possibleOptimization[i]=new String();
-			//iterate over the SLL of the solution
-			for (int j = 0; j < ((SinglyLinkedList)solutions.get(i)).size; j++) {
-				//create a reference to the implicants of the solution
-				DoublyLinkedList currentImplicant =primes[(int)((SinglyLinkedList)solutions.get(i)).get(j)];
-				//convert the implicant to binary
-				String binary = Integer.toString((int)currentImplicant.get(0), 2);
-				int A = 'A';
-				if(j!=0){
-					possibleOptimization[i]=possibleOptimization[i]+'+';
+			for (boolean cMinterm : covered) {
+				if (cMinterm != true) {
+					allCovered = false;
+					break;
 				}
-				//convert the binary to literals
+			}
+			if (allCovered) {
+				solutions.add(p);
+			}
+		}
+		return solutions;		
+	}
+	@Override
+	public DoublyLinkedList getSolutions(DoublyLinkedList[] primes, int[] minterms) {
+		DoublyLinkedList[] coveredMTs = coveredMinterms(primes);
+//		DoublyLinkedList[] coveringPIs = coveringPIs(coveredMTs, minterms);
+		DoublyLinkedList solutions = new DoublyLinkedList();
+//		DoublyLinkedList thisSolution = new DoublyLinkedList();
+//		DoublyLinkedList taken = new DoublyLinkedList();
+		DoublyLinkedList[] powerSet = powerSet(primes.length);
+		solutions = findSolutions(coveredMTs, powerSet, minterms);
+		return solutions;
+	}
+
+	@Override
+	public String[] possibleOptimization(DoublyLinkedList[] primes, DoublyLinkedList solutions, int maxChar) {
+		String[] possibleOptimization = new String[solutions.getSize()];
+		// iterate over the DLL solutions
+		for (int i = 0; i < solutions.getSize(); i++) {
+			// add a string to the returned array representing a solution
+			possibleOptimization[i] = new String();
+			// iterate over the SLL of the solution
+			for (int j = 0; j < ((DoublyLinkedList) solutions.get(i)).getSize(); j++) {
+				// create a reference to the implicants of the solution
+				DoublyLinkedList currentImplicant = primes[(int) ((DoublyLinkedList) solutions.get(i)).get(j)];
+				// convert the implicant to binary
+				String mirroredBinary = Integer.toString((int) currentImplicant.get(0), 2);
+				StringBuilder fullMB = new StringBuilder();
+				for (int m = 0 ; m < maxChar - mirroredBinary.length() ; m++) {
+					fullMB.append('0');
+				}
+				fullMB.append(mirroredBinary);
+				mirroredBinary = fullMB.toString();
+				String binary = new String();
+				for (int k = mirroredBinary.length()-1; k >= 0; k--) {
+					binary=binary+mirroredBinary.charAt(k);
+				}
+//				if (maxChar != mirroredBinary.length()) {
+//					while (binary.length() != maxChar) {
+//						binary += '0';
+//					}
+//				}
+				char A = 'A';
+				if (j != 0) {
+					possibleOptimization[i] = possibleOptimization[i] + '+';
+				}
+				// convert the binary to literals
 				for (int k = 0; k < binary.length(); k++) {
 					boolean found = false;
 					for (int k2 = 1; k2 < currentImplicant.size(); k2++) {
-						if((int)currentImplicant.get(k2)==Math.pow(2, k)){
-							found= true;
+						if ((int) currentImplicant.get(k2) == Math.pow(2,binary.length() - 1 - k)) {
+							found = true;
 						}
 					}
-					if(!found){
-					if(binary.charAt(k)=='0'){
-					possibleOptimization[i]=possibleOptimization[i]+A;	
-					}else{
-						possibleOptimization[i]=possibleOptimization[i]+(A)+'\'';
+					if (!found) {
+						if (binary.charAt(binary.length() - 1 - k) == '0') {
+							possibleOptimization[i] = possibleOptimization[i] + A + '\'';
+						} else {
+							possibleOptimization[i] = possibleOptimization[i] + (A) ;
+						}
 					}
+					A++;
 				}
-				A++;
-				}}
 			}
-		
+		}
+
 		return possibleOptimization;
+	}
+
+	@Override
+	public DoublyLinkedList[] powerSet(int numberOfPrimeImplicants) {
+		int size = (int) Math.pow(2, numberOfPrimeImplicants);
+		DoublyLinkedList[] powerSet = new DoublyLinkedList[size];
+
+		for (int i = 0; i < size; i++) {
+			DoublyLinkedList set = new DoublyLinkedList();
+			for (int j = 0; j < numberOfPrimeImplicants; j++) {
+				if ((i & 1 << j) != 0) {
+					set.add(j);
+				}
+			}
+			powerSet[i] = set;
+		}
+		return powerSet;
+	}
+
+	@Override
+	public String[] bestOptimization(String[] possibleOptimization) {
+		int[] weights = new int[possibleOptimization.length];
+		int minimum = MAX_TERMS_ASSUMED;
+		DoublyLinkedList bestList = new DoublyLinkedList();
+		for (int i = 0; i < weights.length; i++) {
+			weights[i] = possibleOptimization[i].split("+").length;
+			if (weights[i] < minimum) {
+				minimum = weights[i];
+			}
+		}
+		for (int minIn = 0 ; minIn < possibleOptimization.length ; minIn++) {
+			if (weights[minIn] == minimum) {
+				bestList.add(possibleOptimization[minIn]);
+			}
+		}
+		String[] bestArray = new String[bestList.getSize()];
+		DLNode iteratorNode = bestList.getHead();
+		for (int g = 0; g < bestArray.length ; g++) {
+			bestArray[g]= (String) iteratorNode.getElement();
+			iteratorNode = iteratorNode.getNext();
+		}
+		return bestArray;
 	}
 
 }
