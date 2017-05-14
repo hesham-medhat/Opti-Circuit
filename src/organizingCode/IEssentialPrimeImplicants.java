@@ -2,7 +2,6 @@ package organizingCode;
 
 import Code.DLNode;
 import Code.DoublyLinkedList;
-import Code.SinglyLinkedList;
 
 /**
  * This is the interface of the class that finds the essential
@@ -70,7 +69,7 @@ public interface IEssentialPrimeImplicants {
 	 * is trying to get in the recursive calls
 	 * @return the list of SLLs of solutions.
 	 */
-	public SinglyLinkedList findSolutions(SinglyLinkedList solutions, int toCover, DoublyLinkedList[] coveringPIs, SinglyLinkedList thisSolution);
+	public DoublyLinkedList findSolutions(DoublyLinkedList[] coveredMT, DoublyLinkedList[] powerSet, int[] minterms);
 	
 	/**
 	 * This method uses all methods in this class to obtain all the
@@ -82,5 +81,32 @@ public interface IEssentialPrimeImplicants {
 	 * of PxPyPz where (x,y,z,..) are the indices of the PIs in the
 	 * given primes array.
 	 */
-	public SinglyLinkedList getSolutions(final DoublyLinkedList[] primes, final int[] minterms);
+	public DoublyLinkedList getSolutions(final DoublyLinkedList[] primes, final int[] minterms);
+
+	/**
+	 * This method turn all the possible solutions into functions with literals.
+	 * @author Marina
+	 * @param primes array of prime implicants (DLLs).
+	 * @param solutions DLL of DLLs each list is a solution
+	 * @return array of strings each string is a possible solution
+	 */
+	public String[]possibleOptimization (DoublyLinkedList[] primes, DoublyLinkedList solutions, int maxChar);
+	
+	/**
+	 * This method gets a power series of all possible combinations
+	 * of the prime implicants. We will use this in our complete
+	 * search algorithm to find the best solutions.
+	 * @param numberOfPrimeImplicants length of primes array
+	 * @return DLL of the power set of indices supposedly, in the
+	 * primes array.
+	 */
+	public DoublyLinkedList[] powerSet(int numberOfPrimeImplicants) ;
+	
+	/**
+	 * Gets the best solution(s) among all possible
+	 * solutions obtained from the possibleOptimization.
+	 * @param possibleOptimization string array of possible solutions
+	 * @return the best solution(s).
+	 */
+	public String[] bestOptimization(String[]possibleOptimization);
 }
