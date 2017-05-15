@@ -10,8 +10,8 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 public class IO {
-	public static int[] read() {
-		File file = new File("filename.txt");//it can also take the file path as string parameter
+	public int[] read(String path) {
+		File file = new File(path);//it can also take the file path as string parameter
 		BufferedReader br;
 		FileReader fr;
 
@@ -35,12 +35,12 @@ public class IO {
 		}
 	}
 
-	public static void write(String[] solution) {
+	public void write(String[] solution) {
 
 		Writer writer = null;
 
 		try {
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("filename.txt"), "utf-8"));
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("solution.txt"), "utf-8"));
 			for (int i = 0; i < solution.length; i++) {
 				writer.write(solution[i]);
 			}

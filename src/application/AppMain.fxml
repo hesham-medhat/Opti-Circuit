@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="461.0" prefWidth="598.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="465.0" prefWidth="598.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
    <children>
       <TextField fx:id="mintermsTF" layoutX="36.0" layoutY="48.0" prefHeight="51.0" prefWidth="236.0" promptText="Enter space separated minterms to cover" />
       <TextField fx:id="dc" layoutX="34.0" layoutY="174.0" prefHeight="25.0" prefWidth="234.0" promptText="Enter space separated Don't-Care's" />
@@ -24,10 +24,10 @@
       <Label layoutX="335.0" layoutY="223.0" prefHeight="17.0" prefWidth="181.0" text="Prime Implicants:" textFill="#5709e8" />
       <Label layoutX="335.0" layoutY="329.0" prefHeight="17.0" prefWidth="181.0" text="Essential Prime Implicants:" textFill="#4e03ee" />
       <Separator layoutX="284.0" layoutY="8.0" orientation="VERTICAL" prefHeight="446.0" prefWidth="31.0" />
-      <TextField editable="false" layoutX="36.0" layoutY="326.0" prefHeight="113.0" prefWidth="251.0" />
-      <Separator layoutX="9.0" layoutY="300.0" prefHeight="9.0" prefWidth="285.0" />
-      <Label layoutX="37.0" layoutY="309.0" prefHeight="17.0" prefWidth="148.0" text="Miniminisation Steps:" textFill="#1b05f5" />
-      <Label alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" layoutX="299.0" layoutY="430.0" prefHeight="17.0" prefWidth="291.0" text="Developed by Hesham Medhat and Marina Zakaria" textFill="#3f00ebdb" />
+      <TextField editable="false" layoutX="36.0" layoutY="338.0" prefHeight="113.0" prefWidth="251.0" />
+      <Separator layoutX="9.0" layoutY="312.0" prefHeight="9.0" prefWidth="285.0" />
+      <Label layoutX="39.0" layoutY="321.0" prefHeight="17.0" prefWidth="148.0" text="Miniminisation Steps:" textFill="#1b05f5" />
+      <Label alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" layoutX="300.0" layoutY="431.0" prefHeight="17.0" prefWidth="291.0" text="Developed by Hesham Medhat and Marina Zakaria" textFill="#3f00ebdb" />
       <Button layoutX="36.0" layoutY="239.0" mnemonicParsing="false" onAction="#optimise" text="Optimise" />
       <Label fx:id="messageLabel" layoutX="129.0" layoutY="243.0" prefHeight="17.0" prefWidth="114.0" />
       <TextArea fx:id="solutionOut" layoutX="334.0" layoutY="50.0" prefHeight="104.0" prefWidth="220.0" wrapText="true" />
@@ -35,11 +35,11 @@
       <TextArea fx:id="essentialOut" layoutX="335.0" layoutY="346.0" prefHeight="70.0" prefWidth="220.0" />
       <Label layoutX="335.0" layoutY="155.0" text="Optimal Solutions:" textFill="#530cf0" />
       <TextArea fx:id="optimalOut" layoutX="334.0" layoutY="173.0" prefHeight="51.0" prefWidth="220.0" />
-      <TextField layoutX="123.0" layoutY="106.0" promptText="Enter the file path" />
-      <Button layoutX="34.0" layoutY="275.0" mnemonicParsing="false" text="Optimise File Input" />
+      <TextField fx:id="mintermsFile" layoutX="123.0" layoutY="106.0" promptText="Enter the file path" />
+      <Button layoutX="34.0" layoutY="275.0" mnemonicParsing="false" onAction="#optimiseFileInput" text="Optimise File Input" />
       <Label layoutX="37.0" layoutY="110.0" text="Read from file:" />
       <Label layoutX="37.0" layoutY="207.0" text="Read from file:" />
-      <TextField layoutX="123.0" layoutY="203.0" promptText="Enter the file path" />
+      <TextField fx:id="dcFile" layoutX="123.0" layoutY="203.0" promptText="Enter the file path" />
       <Separator layoutX="12.0" layoutY="138.0" prefHeight="9.0" prefWidth="285.0" />
    </children>
 </AnchorPane>
