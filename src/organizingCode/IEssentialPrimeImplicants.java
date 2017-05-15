@@ -57,7 +57,7 @@ public interface IEssentialPrimeImplicants {
 	 * string as Px Py Pz where (x,y,z..) represent the indices
 	 * of these implicants in the "primes" input list.
 	 */
-	public String getEssentials(final DoublyLinkedList[] coveringImplicants);
+	public DoublyLinkedList getEssentials(final DoublyLinkedList[] coveringImplicants);
 	
 	/**
 	 * This function uses recursion to find all possible solutions
@@ -101,6 +101,16 @@ public interface IEssentialPrimeImplicants {
 	 * primes array.
 	 */
 	public DoublyLinkedList[] powerSet(int numberOfPrimeImplicants) ;
+	
+	/**
+	 * Prints a given list of prime implicants.
+	 * @param list to be returned
+	 * @param primes array of prime implicants
+	 * @param maxChar maximum literals in an implicant
+	 * @return String array where each element is an implicant
+	 * in the function form of literals.
+	 */
+	public String printImplicants(DoublyLinkedList list, DoublyLinkedList[] primes, int maxChar);
 	
 	/**
 	 * Gets the best solution(s) among all possible

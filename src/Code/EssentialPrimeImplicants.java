@@ -1,9 +1,5 @@
 package Code;
 
-import java.lang.reflect.Array;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
-
 import organizingCode.IEssentialPrimeImplicants;
 
 /**
@@ -15,6 +11,7 @@ import organizingCode.IEssentialPrimeImplicants;
 public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 
 	private static int MAX_TERMS_ASSUMED = 999999999;
+
 	@Override
 	public void findCombinations(final DLNode node, int sum, final DoublyLinkedList coveredMTs) {
 		if (node != null) {
@@ -95,33 +92,33 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 	}
 
 	@Override
-	public String getEssentials(final DoublyLinkedList[] coveringImplicants) {
+	public DoublyLinkedList getEssentials(final DoublyLinkedList[] coveringImplicants) {
 		DoublyLinkedList essentials = new DoublyLinkedList();
 		for (DoublyLinkedList coveringPI4m : coveringImplicants) {
 			if (coveringPI4m.getSize() == 1) {
 				essentials.add(coveringPI4m.get(0)); // Adding index in primes
 			}
 		}
-
-		if (essentials.getSize() != 0) {
-			final StringBuilder formula = new StringBuilder();
-			DLNode iterator;
-			iterator = essentials.getHead();
-			while (iterator != null) {
-				formula.append('P');
-				formula.append((int) iterator.getElement());
-				iterator = iterator.getNext();
-			}
-			return formula.toString();
-		}
-		return null;
+		return essentials;
+		// if (essentials.getSize() != 0) {
+		// final StringBuilder formula = new StringBuilder();
+		// DLNode iterator;
+		// iterator = essentials.getHead();
+		// while (iterator != null) {
+		// formula.append('P');
+		// formula.append((int) iterator.getElement());
+		// iterator = iterator.getNext();
+		// }
+		// return formula.toString();
+		// }
 	}
-/********/
+
+	/********/
 	@Override
 	public DoublyLinkedList findSolutions(DoublyLinkedList[] coveredMT, DoublyLinkedList[] powerSet, int[] minterms) {
 		DoublyLinkedList solutions = new DoublyLinkedList();
 		for (DoublyLinkedList p : powerSet) {
-			boolean [] covered = new boolean[minterms.length];
+			boolean[] covered = new boolean[minterms.length];
 			boolean allCovered = true;
 			for (int i = 0; i < p.getSize(); i++) {
 				DoublyLinkedList checker = coveredMT[(int) p.get(i)];
@@ -148,15 +145,16 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 				solutions.add(p);
 			}
 		}
-		return solutions;		
+		return solutions;
 	}
+
 	@Override
 	public DoublyLinkedList getSolutions(DoublyLinkedList[] primes, int[] minterms) {
 		DoublyLinkedList[] coveredMTs = coveredMinterms(primes);
-//		DoublyLinkedList[] coveringPIs = coveringPIs(coveredMTs, minterms);
+		// DoublyLinkedList[] coveringPIs = coveringPIs(coveredMTs, minterms);
 		DoublyLinkedList solutions = new DoublyLinkedList();
-//		DoublyLinkedList thisSolution = new DoublyLinkedList();
-//		DoublyLinkedList taken = new DoublyLinkedList();
+		// DoublyLinkedList thisSolution = new DoublyLinkedList();
+		// DoublyLinkedList taken = new DoublyLinkedList();
 		DoublyLinkedList[] powerSet = powerSet(primes.length);
 		solutions = findSolutions(coveredMTs, powerSet, minterms);
 		return solutions;
@@ -176,20 +174,15 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 				// convert the implicant to binary
 				String mirroredBinary = Integer.toString((int) currentImplicant.get(0), 2);
 				StringBuilder fullMB = new StringBuilder();
-				for (int m = 0 ; m < maxChar - mirroredBinary.length() ; m++) {
+				for (int m = 0; m < maxChar - mirroredBinary.length(); m++) {
 					fullMB.append('0');
 				}
 				fullMB.append(mirroredBinary);
 				mirroredBinary = fullMB.toString();
 				String binary = new String();
-				for (int k = mirroredBinary.length()-1; k >= 0; k--) {
-					binary=binary+mirroredBinary.charAt(k);
+				for (int k = mirroredBinary.length() - 1; k >= 0; k--) {
+					binary = binary + mirroredBinary.charAt(k);
 				}
-//				if (maxChar != mirroredBinary.length()) {
-//					while (binary.length() != maxChar) {
-//						binary += '0';
-//					}
-//				}
 				char A = 'A';
 				if (j != 0) {
 					possibleOptimization[i] = possibleOptimization[i] + '+';
@@ -198,7 +191,7 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 				for (int k = 0; k < binary.length(); k++) {
 					boolean found = false;
 					for (int k2 = 1; k2 < currentImplicant.size(); k2++) {
-						if ((int) currentImplicant.get(k2) == Math.pow(2,binary.length() - 1 - k)) {
+						if ((int) currentImplicant.get(k2) == Math.pow(2, binary.length() - 1 - k)) {
 							found = true;
 						}
 					}
@@ -206,7 +199,7 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 						if (binary.charAt(binary.length() - 1 - k) == '0') {
 							possibleOptimization[i] = possibleOptimization[i] + A + '\'';
 						} else {
-							possibleOptimization[i] = possibleOptimization[i] + (A) ;
+							possibleOptimization[i] = possibleOptimization[i] + (A);
 						}
 					}
 					A++;
@@ -240,23 +233,81 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 		int minimum = MAX_TERMS_ASSUMED;
 		DoublyLinkedList bestList = new DoublyLinkedList();
 		for (int i = 0; i < weights.length; i++) {
-			weights[i] = possibleOptimization[i].split("+").length;
+			int terms = 1;
+			for (int j = 0 ; j < possibleOptimization[i].length() ; j++) {
+				 if (possibleOptimization[i].charAt(j) == '+') {
+					 terms++;
+				 }
+			}
+			weights[i] = terms;
 			if (weights[i] < minimum) {
 				minimum = weights[i];
 			}
 		}
-		for (int minIn = 0 ; minIn < possibleOptimization.length ; minIn++) {
+		for (int minIn = 0; minIn < possibleOptimization.length; minIn++) {
 			if (weights[minIn] == minimum) {
 				bestList.add(possibleOptimization[minIn]);
 			}
 		}
 		String[] bestArray = new String[bestList.getSize()];
 		DLNode iteratorNode = bestList.getHead();
-		for (int g = 0; g < bestArray.length ; g++) {
-			bestArray[g]= (String) iteratorNode.getElement();
+		for (int g = 0; g < bestArray.length; g++) {
+			bestArray[g] = (String) iteratorNode.getElement();
 			iteratorNode = iteratorNode.getNext();
 		}
 		return bestArray;
+	}
+
+	@Override
+	public String printImplicants(DoublyLinkedList list, DoublyLinkedList[] primes, int maxChar) {
+		String[] implicants = new String[list.getSize()];
+		for (int i = 0; i < list.getSize(); i++) {
+
+			// add a string to the returned array representing a solution
+			implicants[i] = new String();
+			// iterate over the SLL of the solution
+			// create a reference to the implicants of the solution
+			DoublyLinkedList currentImplicant = primes[(int) list.get(i)];
+			// convert the implicant to binary
+			String mirroredBinary = Integer.toString((int) currentImplicant.get(0), 2);
+			StringBuilder fullMB = new StringBuilder();
+			for (int m = 0; m < maxChar - mirroredBinary.length(); m++) {
+				fullMB.append('0');
+			}
+			fullMB.append(mirroredBinary);
+			mirroredBinary = fullMB.toString();
+			String binary = new String();
+			for (int k = mirroredBinary.length() - 1; k >= 0; k--) {
+				binary = binary + mirroredBinary.charAt(k);
+			}
+			char A = 'A';
+
+			// convert the binary to literals
+			for (int k = 0; k < binary.length(); k++) {
+				boolean found = false;
+				for (int k2 = 1; k2 < currentImplicant.size(); k2++) {
+					if ((int) currentImplicant.get(k2) == Math.pow(2, binary.length() - 1 - k)) {
+						found = true;
+					}
+				}
+				if (!found) {
+					if (binary.charAt(binary.length() - 1 - k) == '0') {
+						implicants[i] = implicants[i] + A + '\'';
+					} else {
+						implicants[i] = implicants[i] + (A);
+					}
+				}
+				A++;
+			}
+		}
+		String result = new String();
+		for (int i = 0; i < implicants.length; i++) {
+			result += implicants[i];
+			result += " ";
+		}
+
+		return result;
+
 	}
 
 }

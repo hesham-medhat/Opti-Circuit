@@ -35,7 +35,7 @@ public class IO {
 		}
 	}
 
-	public static void read(String[] solution) {
+	public static void write(String[] solution) {
 
 		Writer writer = null;
 
