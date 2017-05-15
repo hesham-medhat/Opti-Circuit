@@ -83,7 +83,7 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 				}
 				firstIteration = false;
 				formula.append('P');
-				formula.append(iterator.getElement());
+				formula.append(((int)iterator.getElement() + 1));
 				iterator = iterator.getNext();
 			}
 			formula.append(')');

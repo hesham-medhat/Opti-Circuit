@@ -24,7 +24,6 @@
       <Label layoutX="335.0" layoutY="223.0" prefHeight="17.0" prefWidth="181.0" text="Prime Implicants:" textFill="#5709e8" />
       <Label layoutX="335.0" layoutY="329.0" prefHeight="17.0" prefWidth="181.0" text="Essential Prime Implicants:" textFill="#4e03ee" />
       <Separator layoutX="284.0" layoutY="8.0" orientation="VERTICAL" prefHeight="446.0" prefWidth="31.0" />
-      <TextField editable="false" layoutX="36.0" layoutY="338.0" prefHeight="113.0" prefWidth="251.0" />
       <Separator layoutX="9.0" layoutY="312.0" prefHeight="9.0" prefWidth="285.0" />
       <Label layoutX="39.0" layoutY="321.0" prefHeight="17.0" prefWidth="148.0" text="Miniminisation Steps:" textFill="#1b05f5" />
       <Label alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" layoutX="300.0" layoutY="431.0" prefHeight="17.0" prefWidth="291.0" text="Developed by Hesham Medhat and Marina Zakaria" textFill="#3f00ebdb" />
@@ -41,5 +40,7 @@
       <Label layoutX="37.0" layoutY="207.0" text="Read from file:" />
       <TextField fx:id="dcFile" layoutX="123.0" layoutY="203.0" promptText="Enter the file path" />
       <Separator layoutX="12.0" layoutY="138.0" prefHeight="9.0" prefWidth="285.0" />
+      <TextArea fx:id="stepsOut" layoutX="39.0" layoutY="342.0" prefHeight="104.0" prefWidth="236.0" />
+      <Label fx:id="fileFeedback" layoutX="157.0" layoutY="279.0" prefHeight="17.0" prefWidth="131.0" />
    </children>
 </AnchorPane>

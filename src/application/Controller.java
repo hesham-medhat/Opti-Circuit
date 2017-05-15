@@ -1,5 +1,6 @@
 package application;
 
+import Code.DLNode;
 import Code.DoublyLinkedList;
 import Code.EssentialPrimeImplicants;
 import Code.IO;
@@ -37,6 +38,8 @@ public class Controller {
 	private TextField mintermsFile;
 	@FXML
 	private TextField dcFile;
+	@FXML
+	private Label fileFeedback;
 	
 	private int[] minterms;
 	private int[] mintermsDC;
@@ -84,6 +87,7 @@ public class Controller {
 		this.minterms = io.read(mintermsPath);
 		this.mintermsDC = this.minterms;
 		try {
+			fileFeedback.setText(" ");
 			String dcPath = dcFile.getText();
 			int[] dc = io.read(dcPath);
 			this.mintermsDC = new int[dc.length + minterms.length];
@@ -94,7 +98,7 @@ public class Controller {
 			for (int j = 0 ; j < dc.length ; j++) {
 				mintermsDC[i + j] = dc[j];
 			}
-			System.out.println("Solution is out in the solutions.txt file in  my directory!");
+			fileFeedback.setText("Success! Solution is on solutions.txt");
 		} catch (RuntimeException eFile) {
 			
 		}
@@ -145,6 +149,37 @@ public class Controller {
 			optimalOut.appendText(bestSolution);
 			optimalOut.appendText("\n");
 		}
+
+		stepsOut.setText("Each prime implicant covers a set of minterms as follows:\n");
+		stepsOut.setWrapText(true);
+		DLNode iteratorNode;
+		for (i = 0 ; i < primes.length ; i++) {
+			iteratorNode = coveredMT[i].getHead();
+			stepsOut.appendText("Prime implicant no. " + (i + 1) + " covers minterms: ");
+			StringBuilder sb = new StringBuilder();
+			while (iteratorNode != null) {
+				sb.append((int) iteratorNode.getElement());
+				iteratorNode = iteratorNode.getNext();
+				sb.append(' ');
+			}
+			stepsOut.appendText(sb.toString() + "\n");
+		}
+		stepsOut.appendText("\n\n");
+		for (i = 0 ; i < coveringImplicants.length ; i++) {
+			iteratorNode = coveringImplicants[i].getHead();
+			stepsOut.appendText("The covering implicants for minterm " + minterms[i] + " are no.: ");
+			StringBuilder sb = new StringBuilder();
+			while (iteratorNode != null) {
+				sb.append(((int) iteratorNode.getElement() + 1));
+				iteratorNode = iteratorNode.getNext();
+				sb.append(' ');
+			}
+			stepsOut.appendText(sb.toString() + "\n");
+		}
+		stepsOut.appendText("\nObviously, the minterms covered by only one implicant are essential.\n\nHence, Petrick's formula would be like this: \n");
+		stepsOut.appendText(essential.getFormula(coveringImplicants));
+		stepsOut.appendText("\nAfter simplification of this formula we should find all the possible solutions and then find the least costly ones to cover all minterms.");
+
 		return bestSolutions;
 	}
 }
