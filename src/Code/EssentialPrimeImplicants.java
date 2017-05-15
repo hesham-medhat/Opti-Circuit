@@ -303,7 +303,7 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 		String result = new String();
 		for (int i = 0; i < implicants.length; i++) {
 			result += implicants[i];
-			result += " ";
+			result += "\n";
 		}
 
 		return result;

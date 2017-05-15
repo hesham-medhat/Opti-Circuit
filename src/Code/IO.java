@@ -20,7 +20,7 @@ public class IO {
 			br = new BufferedReader(fr);
 			String line = br.readLine();
 			line = line.trim();
-			String[] mintermsStrings = line.split(" ");
+			String[] mintermsStrings = line.split(",");
 			int[] minterms = new int[mintermsStrings.length];
 			for (int i = 0 ; i < mintermsStrings.length ; i++) {
 				minterms[i] = Integer.parseInt(mintermsStrings[i]);
