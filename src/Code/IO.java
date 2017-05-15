@@ -11,7 +11,7 @@ import java.io.Writer;
 
 public class IO {
 	public static int[] read() {
-		File file = new File("words.txt");
+		File file = new File("filename.txt");//it can also take the file path as string parameter
 		BufferedReader br;
 		FileReader fr;
 
