@@ -43,6 +43,7 @@ public class IO {
 			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("solution.txt"), "utf-8"));
 			for (int i = 0; i < solution.length; i++) {
 				writer.write(solution[i]);
+				writer.write("                                                                                              ");
 			}
 		} catch (IOException ex) {
 

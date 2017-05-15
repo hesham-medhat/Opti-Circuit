@@ -1,0 +1,1 @@
+A'B'D+C'D+AC'+BD'+AB             A'B'D+C'D+AD'+BD'+AB             A'B'D+AC'+BC'+BD'+AB             

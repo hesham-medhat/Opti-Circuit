@@ -119,19 +119,22 @@ public class EssentialPrimeImplicants implements IEssentialPrimeImplicants {
 		DoublyLinkedList solutions = new DoublyLinkedList();
 		for (DoublyLinkedList p : powerSet) {
 			boolean[] covered = new boolean[minterms.length];
+			for (int i = 0; i < covered.length; i++) {
+				covered[i] = false;
+			}
 			boolean allCovered = true;
 			for (int i = 0; i < p.getSize(); i++) {
 				DoublyLinkedList checker = coveredMT[(int) p.get(i)];
 				DLNode iteratorNode = checker.getHead();
 				while (iteratorNode != null) {
-					int mintermIndex = -1;
+					int mintermIndex = 0;
 					for (int minterm : minterms) {
-						mintermIndex++;
 						if (minterm == (int) iteratorNode.getElement()) {
+							covered[mintermIndex] = true;
 							break;
 						}
+						mintermIndex++;
 					}
-					covered[mintermIndex] = true;
 					iteratorNode = iteratorNode.getNext();
 				}
 			}

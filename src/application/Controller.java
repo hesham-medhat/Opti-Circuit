@@ -46,6 +46,7 @@ public class Controller {
 
 	public void optimise(ActionEvent event) {
 		try {
+			messageLabel.setText(" ");
 			String mintermsString = mintermsTF.getText();
 			mintermsString = mintermsString.trim();
 			
@@ -100,7 +101,7 @@ public class Controller {
 			}
 			fileFeedback.setText("Success! Solution is on solutions.txt");
 		} catch (RuntimeException eFile) {
-			
+			fileFeedback.setText("Failed to read from file.");
 		}
 		workWithInput();
 		String[] bestSolutions = workWithInput();
@@ -118,6 +119,14 @@ public class Controller {
 		DoublyLinkedList essentialsList = essential.getEssentials(coveringImplicants);
 		int maxChar = primeImplicants.getMaxChar();
 		String essentialString = essential.printImplicants(essentialsList, primes, maxChar);
+		if (minterms.length == Math.pow(2, maxChar)) {
+			solutionOut.setText("1");
+			optimalOut.setText("1");
+			stepsOut.setText("All minterms are active.\nTherefore, the solution is always one for this input function.");
+			String[] s1 = new String[1];
+			s1[0] = "1";
+			return s1;
+		}
 		essentialOut.setText(essentialString);
 
 		DoublyLinkedList primesList = new DoublyLinkedList();
@@ -148,6 +157,7 @@ public class Controller {
 			optimalOut.appendText(i + ". ");
 			optimalOut.appendText(bestSolution);
 			optimalOut.appendText("\n");
+			i++;
 		}
 
 		stepsOut.setText("Each prime implicant covers a set of minterms as follows:\n");
