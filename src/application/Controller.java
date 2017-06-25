@@ -16,7 +16,7 @@ import javafx.scene.control.TextField;
  * @author H
  *
  */
-public class Controller {
+public class Controller  {
 	
 	@FXML
 	private TextField mintermsTF;
